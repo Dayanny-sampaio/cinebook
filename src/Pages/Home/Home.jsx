@@ -28,29 +28,12 @@ function Home(){
     ];
 
     const [filmes, setFilmes] = useState([]);
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState(false);
 
-    const livros =[
-        {
-            titulo: "O pequeno Principe",
-            tipo: "Livro",
-            ano: "1943",
-            imagem: "https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg"
-        },
-
-        {
-            titulo: "Dom casmurro",
-            tipo: "Livro",
-            ano: "1899",
-            imagem: "https://covers.openlibrary.org/b/isbn/9788535910663-L.jpg"
-        },
-
-        {
-            titulo: "1984",
-            tipo: "Livro",
-            ano: "1949",
-            imagem: "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg"
-        }
-    ];
+    const [livros, setLivros] = useState([]);
+    const [carregandoLivros, setCarregandoLivros] = useState(true);
+    const [erroLivros, setErroLivros] = useState(false);
 
     const albuns = [
         {
@@ -78,33 +61,74 @@ function Home(){
 
     useEffect(() => {
         async function buscarFilmes(){
-            const token = import.meta.env.VITE_TMDB_KEY;
+            try{ //tente fazer isso
+                const token = import.meta.env.VITE_TMDB_KEY;
 
-            const resposta = await fetch (
-                "https://api.themoviedb.org/3/trending/movie/week?language=pt-BR",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                const resposta = await fetch (
+                    "https://api.themoviedb.org/3/trending/movie/week?language=pt-BR",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Falha ao buscar filmes")
                 }
-            );
 
-            const dados = await resposta.json();
+                const dados = await resposta.json();
             
-            const filmesTraduzidos = dados.results.map((filme) => ({
-                id: filme.id,
-                titulo: filme.title,
-                tipo: "Filme",
-                ano: filme.release_date ? filme.release_date.slice(0 , 4): "-",
-                imagem: filme.poster_path 
-                    ? "https://image.tmdb.org/t/p/w500" + filme.poster_path 
-                    : ""
-            }));
+                const filmesTraduzidos = dados.results.map((filme) => ({
+                    id: filme.id,
+                    titulo: filme.title,
+                    tipo: "Filme",
+                    ano: filme.release_date ? filme.release_date.slice(0 , 4): "-",
+                    imagem: filme.poster_path 
+                        ? "https://image.tmdb.org/t/p/w500" + filme.poster_path 
+                        : ""
+                }));
 
-            setFilmes(filmesTraduzidos);
+                setFilmes(filmesTraduzidos);
+            } catch (e) {// se der errado
+                setErro(true);
+            } finally {// indepedente se deu certo ou errado o carregando tem que encerrar
+                setCarregando(false)
+            }
+        }
+            buscarFilmes();
+    }, []);
+
+    useEffect(() => {
+        async function buscarLivros() {
+            try{
+                const resposta = await fetch(
+                    "https://openlibrary.org/trending/weekly.json"    
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Falha ao buscar livros");
+                }
+            
+                const dados = await resposta.json();
+                
+                const livrosTraduzidos = dados.works.slice(0, 12).map((livro) => ({
+                    id: livros.key,
+                    titulo: livros.title,
+                    tipo: "Livro",
+                    ano: livro.first_publish_year ? String(livro.first_publish_year) : "-",
+                    imagem: livro.cover_i ? `https://covers.openlibrary.org/b/id/${livro.cover_i}-L.jpg` : ""
+                }));
+
+                setLivros(livrosTraduzidos);
+        } catch (e) {
+            setErroLivros(true);
+        }finally{
+            setCarregandoLivros(false);
         }
 
-        buscarFilmes();
+        }
+        buscarLivros();
     }, []);
 
     return (
@@ -126,7 +150,7 @@ function Home(){
                 <div className="destaques">
                     {destaques.map((midia) => (
                         <MediaCard
-                            key={midia.id}
+                            key={midia.titulo}
                             titulo={midia.titulo}
                             tipo={midia.tipo}
                             ano={midia.ano}
@@ -138,6 +162,12 @@ function Home(){
 
             <section>
                 <h2>Filmes em destaque</h2>
+
+                {carregando && <p>Carregando filmes...</p>} {/* se estiver carregando*/}
+                {erro && <p>Não foi possível carregar os filmes. Tente novamente mais tarde</p>}{/*se houver algum erro no carregamento*/}
+                {!carregando && !erro && filmes.length === 0 && (
+                    <p>Nenhum filme encontrado</p>
+                )}
 
                 <div className="destaques">
                     {filmes.map((filme)=> (
@@ -154,6 +184,12 @@ function Home(){
 
             <section>
                 <h2>Livros em Destaques</h2>
+
+                {carregandoLivros && <p>Carregando livros...</p>}
+                {erroLivros && <p>Não foi possível carregar os livros</p>}
+                {!carregandoLivros &&!erroLivros && livros.length === 0 && (
+                    <p>Nenhum livro encontrado</p>
+                )}
 
                 <div className="destaques">
                     {livros.map((livros) => (
