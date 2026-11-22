@@ -8,28 +8,6 @@ import { useEffect, useState } from "react";
 
 function Home(){
 
-    const destaques = [
-        {
-            titulo: "Interestelar",
-            tipo: "Filme",
-            ano: "2014",
-            imagem: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" 
-        },
-        {
-            titulo: "O pequeno principe",
-            tipo: "Livro",
-            ano:"1943",
-            imagem:  "https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg"
-        },
-        {
-            titulo: "Random Aces Memories",
-            tipo: "Album",
-            ano:"2013",
-            imagem: "https://www.theaudiodb.com/images/media/album/thumb/random-access-memories-51c8c1b7d9a2f.jpg"
-
-        }
-    ];
-
     const [filmes, setFilmes] = useState([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(false);
@@ -85,25 +63,6 @@ useEffect(() => {
 
                 <Link to="/explorar" className="botao-explorar">Explorar</Link>
                 
-            </section>
-
-            <section>
-                <h2>Destaques</h2>
-
-                <div className="destaques">
-                    {destaques.map((midia) => (
-                        <MediaCard
-                            key={midia.titulo}
-                            titulo={midia.titulo}
-                            tipo={midia.tipo}
-                            ano={midia.ano}
-                            imagem={midia.imagem}    
-                        />
-                    ))}
-                </div>
-            </section>
-
-            <section>
                 <h2>Filmes em destaque</h2>
 
                 {carregando && <p>Carregando filmes...</p>} {/* se estiver carregando*/}

@@ -122,39 +122,51 @@ export default function Biblioteca() {
       </header>
 
       <section className="biblioteca-resumo">
-        <div className="biblioteca-resumo-item">
-          <span>{midias.length}</span>
-          <p>Na coleção</p>
+        <div className="biblioteca-resumo-grupo">
+          <h3>Sua biblioteca</h3>
+
+          <div className="biblioteca-resumo-formato">
+            <div className="biblioteca-resumo-item">
+              <span>{midias.length}</span>
+              <p>Na coleção</p>
+            </div>
+
+            <div className="biblioteca-resumo-item">
+              <span>{totalFilmes}</span>
+              <p>Filmes</p>
+            </div>
+
+            <div className="biblioteca-resumo-item">
+              <span>{totalSeries}</span>
+              <p>Séries</p>
+            </div>
+
+            <div className="biblioteca-resumo-item">
+              <span>{totalLivros}</span>
+              <p>Livros</p>
+            </div>
+          </div>
         </div>
 
-        <div className="biblioteca-resumo-item">
-          <span>{totalFilmes}</span>
-          <p>Filmes</p>
-        </div>
+        <div className="biblioteca-resumo-grupo">
+          <h3>Sua atividade</h3>
 
-        <div className="biblioteca-resumo-item">
-          <span>{totalSeries}</span>
-          <p>Séries</p>
-        </div>
+          <div className="biblioteca-resumo-status">
+            <div className="biblioteca-resumo-item">
+              <span>{totalFavoritos}</span>
+              <p>Favoritos</p>
+            </div>
 
-        <div className="biblioteca-resumo-item">
-          <span>{totalLivros}</span>
-          <p>Livros</p>
-        </div>
+            <div className="biblioteca-resumo-item">
+              <span>{totalQueroConsumir}</span>
+              <p>Quero assistir/ler</p>
+            </div>
 
-        <div className="biblioteca-resumo-item">
-          <span>{totalFavoritos}</span>
-          <p>Favoritos</p>
-        </div>
-
-        <div className="biblioteca-resumo-item">
-          <span>{totalQueroConsumir}</span>
-          <p>Quero assistir/ler</p>
-        </div>
-
-        <div className="biblioteca-resumo-item">
-          <span>{totalConcluidas}</span>
-          <p>Já assisti/li</p>
+            <div className="biblioteca-resumo-item">
+              <span>{totalConcluidas}</span>
+              <p>Já assisti/li</p>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -31,28 +31,40 @@
 .biblioteca-resumo {
   max-width: 1050px;
   margin: 0 auto 80px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  row-gap: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
   background-color: #181820;
   border: 1px solid #292933;
   border-radius: 12px;
-  padding: 28px 15px;
+  padding: 30px;
+}
+
+.biblioteca-resumo-grupo h3 {
+  color: #f5f5f5;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.biblioteca-resumo-formato,
+.biblioteca-resumo-status {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.biblioteca-resumo-status {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .biblioteca-resumo-item {
   text-align: center;
-  border-right: 1px solid #34343f;
-  padding: 10px 8px;
-}
-
-.biblioteca-resumo-item:nth-child(4n),
-.biblioteca-resumo-item:last-child {
-  border-right: none;
-}
-
-.biblioteca-resumo-item:last-child {
-  border-right: none;
+  background-color: #20202a;
+  border: 1px solid #292933;
+  border-radius: 10px;
+  padding: 20px 10px;
+  min-width: 0;
 }
 
 .biblioteca-resumo-item span {
@@ -64,7 +76,7 @@
 .biblioteca-resumo-item p {
   color: #a1a1aa;
   font-size: 13px;
-  margin-top: 5px;
+  margin-top: 7px;
 }
 
 .biblioteca-colecao {
@@ -243,9 +255,14 @@
   }
 
   .biblioteca-resumo {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px 0;
+    padding: 22px 15px;
+    gap: 25px;
     margin-bottom: 55px;
+  }
+
+  .biblioteca-resumo-formato,
+  .biblioteca-resumo-status {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .biblioteca-resumo-item:nth-child(even),
