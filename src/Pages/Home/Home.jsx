@@ -1,6 +1,9 @@
 import "./Home.css";
 import {Link} from "react-router-dom";
 import MediaCard from "../../Componentes/MediaCard/MediaCard";
+import { buscarFilmesDestaque } from "../../Services/filmeService";
+import { buscarLivrosDestaque } from "../../Services/livroService";
+import { buscarSeriesDestaque } from "../../Services/serieService";
 import { useEffect, useState } from "react";
 
 function Home(){
@@ -35,101 +38,41 @@ function Home(){
     const [carregandoLivros, setCarregandoLivros] = useState(true);
     const [erroLivros, setErroLivros] = useState(false);
 
-    const albuns = [
-        {
-            titulo: "Random Access Memories",
-            tipo: "Álbum",
-            ano:"2013",
-            imagem:"https://share.google/lsoPiBmSLLkIzhK5n"
-        },
+    const [series, setSeries] = useState([]);
+    const [carregandoSerie, setCarregandoSerie] = useState(true);
+    const [erroSerie, setErroSerie] = useState(false);
 
-        {
-            titulo: "Thriller",
-            tipo: "Álbum",
-            ano:"1982",
-            imagem:"https://www.theaudiodb.com/images/media/album/thumb/thriller-4f4f6b1e6c1f5d4.jpg"
-        },
+    
+useEffect(() => {
+    async function buscarDestaques() {
+        try {
+            const [dadosFilmes, dadosSeries, dadosLivros] =
+                await Promise.all([
+                    buscarFilmesDestaque(),
+                    buscarSeriesDestaque(),
+                    buscarLivrosDestaque()
+                ]);
 
-        {
-            titulo: "Abbed Road",
-            tipo: "Álbum",
-            ano:"1969",
-            imagem:"https://www.theaudiodb.com/images/media/album/thumb/abbey-road-4e1f1c5a2e3b4d6.jpg"
-        }
+            setFilmes(dadosFilmes);
+            setSeries(dadosSeries);
+            setLivros(dadosLivros);
 
-    ];
-
-    useEffect(() => {
-        async function buscarFilmes(){
-            try{ //tente fazer isso
-                const token = import.meta.env.VITE_TMDB_KEY;
-
-                const resposta = await fetch (
-                    "https://api.themoviedb.org/3/trending/movie/week?language=pt-BR",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                if (!resposta.ok) {
-                    throw new Error("Falha ao buscar filmes")
-                }
-
-                const dados = await resposta.json();
-            
-                const filmesTraduzidos = dados.results.map((filme) => ({
-                    id: filme.id,
-                    titulo: filme.title,
-                    tipo: "Filme",
-                    ano: filme.release_date ? filme.release_date.slice(0 , 4): "-",
-                    imagem: filme.poster_path 
-                        ? "https://image.tmdb.org/t/p/w500" + filme.poster_path 
-                        : ""
-                }));
-
-                setFilmes(filmesTraduzidos);
-            } catch (e) {// se der errado
-                setErro(true);
-            } finally {// indepedente se deu certo ou errado o carregando tem que encerrar
-                setCarregando(false)
-            }
-        }
-            buscarFilmes();
-    }, []);
-
-    useEffect(() => {
-        async function buscarLivros() {
-            try{
-                const resposta = await fetch(
-                    "https://openlibrary.org/trending/weekly.json"    
-                );
-
-                if (!resposta.ok) {
-                    throw new Error("Falha ao buscar livros");
-                }
-            
-                const dados = await resposta.json();
-                
-                const livrosTraduzidos = dados.works.slice(0, 12).map((livro) => ({
-                    id: livros.key,
-                    titulo: livros.title,
-                    tipo: "Livro",
-                    ano: livro.first_publish_year ? String(livro.first_publish_year) : "-",
-                    imagem: livro.cover_i ? `https://covers.openlibrary.org/b/id/${livro.cover_i}-L.jpg` : ""
-                }));
-
-                setLivros(livrosTraduzidos);
-        } catch (e) {
+        } catch (erro) {
+            console.error("Erro ao buscar destaques:", erro);
+            setErro(true);
+            setErroSerie(true);
             setErroLivros(true);
-        }finally{
+
+        } finally {
+            setCarregando(false);
+            setCarregandoSerie(false);
             setCarregandoLivros(false);
         }
+    }
 
-        }
-        buscarLivros();
-    }, []);
+    buscarDestaques();
+}, []);
+
 
     return (
         <main>
@@ -137,10 +80,10 @@ function Home(){
                 <h1>Descubra o que você ama</h1>
 
                 <p>
-                    Filmes, livros e músicas em um só lugar.
+                    Filmes, séries e livros em um só lugar.
                 </p>
 
-                <Link to="/explorar">Explorar</Link>
+                <Link to="/explorar" className="botao-explorar">Explorar</Link>
                 
             </section>
 
@@ -171,54 +114,65 @@ function Home(){
 
                 <div className="destaques">
                     {filmes.map((filme)=> (
-                        <MediaCard
-                            key={filme.id}
-                            titulo={filme.titulo}
-                            tipo={filme.tipo}
-                            ano={filme.ano}
-                            imagem={filme.imagem}
-                        />
+                        <Link to={`/midia/filme/${filme.id}`} key={filme.id}>
+                            <MediaCard
+                                titulo={filme.titulo}
+                                tipo={filme.tipo}
+                                ano={filme.ano}
+                                imagem={filme.imagem}
+                            />
+                        </Link>
                     ))}
                 </div>
             </section>
 
             <section>
-                <h2>Livros em Destaques</h2>
+                <h2>Séries em destaque</h2>
+
+                {carregandoSerie && <p>Carregando séries...</p>} {/* se estiver carregando*/}
+                {erroSerie && <p>Não foi possível carregar as séries. Tente novamente mais tarde</p>}{/*se houver algum erro no carregamento*/}
+                {!carregandoSerie && !erroSerie && series.length === 0 && (
+                    <p>Nenhuma série encontrada</p>
+                )}
+
+                <div className="destaques">
+                    {series.map((serie)=> (
+                        <Link to={`/midia/serie/${serie.id}`} key={serie.id}>
+                            <MediaCard
+                                titulo={serie.titulo}
+                                tipo={serie.tipo}
+                                ano={serie.ano}
+                                imagem={serie.imagem}
+                            />
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            <section>
+                <h2>Livros em destaque</h2>
 
                 {carregandoLivros && <p>Carregando livros...</p>}
-                {erroLivros && <p>Não foi possível carregar os livros</p>}
-                {!carregandoLivros &&!erroLivros && livros.length === 0 && (
+                {erroLivros && <p>Não foi possível carregar os livros. Tente novamente mais tarde</p>}
+                {!carregandoLivros && !erroLivros && livros.length === 0 && (
                     <p>Nenhum livro encontrado</p>
                 )}
 
                 <div className="destaques">
-                    {livros.map((livros) => (
-                        <MediaCard
-                            key={livros.titulo}
-                            titulo={livros.titulo}
-                            tipo={livros.tipo}
-                            ano={livros.ano}
-                            imagem={livros.imagem}
-                        />
+                    {livros.map((livro) => (
+                        <Link to={`/midia/livro/${livro.id}`} key={livro.id}>
+                            <MediaCard
+                                titulo={livro.titulo}
+                                tipo={livro.tipo}
+                                ano={livro.ano}
+                                imagem={livro.imagem}
+                            />
+                        </Link>
                     ))}
                 </div>
             </section>
 
-            <section>
-                <h2>Álbuns em Destaques</h2>
 
-                <div className="destaques">
-                    {albuns.map((albuns) => (
-                        <MediaCard
-                            key={albuns.titulo}
-                            titulo={albuns.titulo}
-                            tipo={albuns.tipo}
-                            ano={albuns.ano}
-                            imagem={albuns.imagem}
-                        />
-                    ))}
-                </div>
-            </section>
         </main>
     )
 }

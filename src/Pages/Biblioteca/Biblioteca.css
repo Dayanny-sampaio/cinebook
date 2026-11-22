@@ -1,0 +1,264 @@
+.biblioteca-pagina {
+  background-color: #0f0f14;
+  color: #f5f5f5;
+  min-height: calc(100vh - 64px);
+  padding: 70px 6%;
+}
+
+.biblioteca-cabecalho {
+  text-align: center;
+  margin-bottom: 55px;
+}
+
+.biblioteca-etiqueta {
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.biblioteca-cabecalho h1 {
+  color: #f5f5f5;
+  font-size: 42px;
+  margin: 15px 0;
+}
+
+.biblioteca-cabecalho p {
+  color: #a1a1aa;
+  font-size: 16px;
+}
+
+.biblioteca-resumo {
+  max-width: 1050px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 25px;
+  background-color: #181820;
+  border: 1px solid #292933;
+  border-radius: 12px;
+  padding: 28px 15px;
+}
+
+.biblioteca-resumo-item {
+  text-align: center;
+  border-right: 1px solid #34343f;
+  padding: 10px 8px;
+}
+
+.biblioteca-resumo-item:nth-child(4n),
+.biblioteca-resumo-item:last-child {
+  border-right: none;
+}
+
+.biblioteca-resumo-item:last-child {
+  border-right: none;
+}
+
+.biblioteca-resumo-item span {
+  font-size: 28px;
+  font-weight: 600;
+  color: #a78bfa;
+}
+
+.biblioteca-resumo-item p {
+  color: #a1a1aa;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.biblioteca-colecao {
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.biblioteca-colecao-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.biblioteca-colecao-cabecalho h2 {
+  color: #f5f5f5;
+  font-size: 26px;
+  margin-top: 8px;
+}
+
+.biblioteca-explorar {
+  color: #a78bfa;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.biblioteca-explorar:hover {
+  color: #c4b5fd;
+}
+
+.biblioteca-filtros {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
+}
+
+.biblioteca-filtros button {
+  background-color: #181820;
+  border: 1px solid #30303b;
+  color: #a1a1aa;
+  padding: 10px 17px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.biblioteca-filtros button:hover {
+  border-color: #8b5cf6;
+  color: #f5f5f5;
+}
+
+.biblioteca-filtros button.selecionado {
+  background-color: #8b5cf6;
+  color: #ffffff;
+  border-color: #8b5cf6;
+}
+
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 30px 22px;
+}
+
+.biblioteca-card {
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+  transition: transform 0.2s;
+}
+
+.biblioteca-card:hover {
+  transform: translateY(-5px);
+}
+
+.biblioteca-imagem-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #181820;
+}
+
+.biblioteca-imagem-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.biblioteca-favorito {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(15, 15, 20, 0.85);
+  color: #f87171;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.biblioteca-card h3 {
+  font-size: 15px;
+  color: #f5f5f5;
+  margin: 12px 0 5px;
+}
+
+.biblioteca-card > p {
+  color: #a1a1aa;
+  font-size: 13px;
+}
+
+.biblioteca-card-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: #a78bfa;
+}
+
+.biblioteca-nota {
+  color: #fbbf24;
+  white-space: nowrap;
+}
+
+.biblioteca-vazia {
+  text-align: center;
+  padding: 80px 20px;
+  border: 1px dashed #34343f;
+  border-radius: 12px;
+}
+
+.biblioteca-vazia > span {
+  color: #a78bfa;
+  font-size: 35px;
+}
+
+.biblioteca-vazia h3 {
+  color: #f5f5f5;
+  margin: 15px 0 10px;
+}
+
+.biblioteca-vazia p {
+  color: #a1a1aa;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.biblioteca-vazia a {
+  display: inline-block;
+  background-color: #8b5cf6;
+  color: white;
+  padding: 11px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.biblioteca-mensagem {
+  text-align: center;
+  color: #a1a1aa;
+  padding: 80px 0;
+}
+
+@media (max-width: 700px) {
+  .biblioteca-pagina {
+    padding: 45px 20px;
+  }
+
+  .biblioteca-cabecalho h1 {
+    font-size: 32px;
+  }
+
+  .biblioteca-resumo {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 0;
+    margin-bottom: 55px;
+  }
+
+  .biblioteca-resumo-item:nth-child(even),
+  .biblioteca-resumo-item:last-child {
+    border-right: none;
+  }
+  .biblioteca-colecao-cabecalho {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .biblioteca-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px 15px;
+  }
+}
